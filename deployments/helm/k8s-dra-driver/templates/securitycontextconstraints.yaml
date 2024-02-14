@@ -39,7 +39,7 @@ seccompProfiles:
 supplementalGroups:
   type: RunAsAny
 users:
-- {{ include "k8s-dra-driver.serviceAccountName" . }}
+- system:serviceaccount:{{ include "k8s-dra-driver.namespace" . }}:{{ include "k8s-dra-driver.serviceAccountName" . }}
 volumes:
 - '*'
 {{- end }}
