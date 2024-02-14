@@ -37,7 +37,14 @@ spec:
   - name: shared-gpu
     source:
       resourceClaimName: shared-gpu
-
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
 ---
 apiVersion: v1
 kind: Pod
@@ -59,3 +66,11 @@ spec:
   - name: shared-gpu
     source:
       resourceClaimName: shared-gpu
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
