@@ -11,6 +11,5 @@ rules:
   - resource.k8s.io
   - gpu.resource.nvidia.com
   - nas.gpu.resource.nvidia.com
-  - security.openshift.io
   resources: ["*"]
   verbs: ["*"]
