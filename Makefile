@@ -27,6 +27,12 @@ ifeq ($(IMAGE_NAME),)
 IMAGE_NAME = $(REGISTRY)/$(DRIVER_NAME)
 endif
 
+ifeq ($(DOCKER),podman)
+BUILD_VOLUME_OPTS=--privileged -v $(PWD):/work:Z
+else
+BUILD_VOLUME_OPTS=-v $(PWD):/work --user $$(id -u):$$(id -g)
+endif
+
 CMDS := $(patsubst ./cmd/%/,%,$(sort $(dir $(wildcard ./cmd/*/))))
 CMD_TARGETS := $(patsubst %,cmd-%, $(CMDS))
 
@@ -199,9 +205,8 @@ $(DOCKER_TARGETS): docker-%:
 		-e GOCACHE=/tmp/.cache/go \
 		-e GOMODCACHE=/tmp/.cache/gomod \
 		-e GOLANGCI_LINT_CACHE=/tmp/.cache/golangci-lint \
-		-v $(PWD):/work \
+		$(BUILD_VOLUME_OPTS) \
 		-w /work \
-		--user $$(id -u):$$(id -g) \
 		$(BUILDIMAGE) \
 			make $(*)
 
@@ -214,7 +219,6 @@ PHONY: .shell
 		-e GOCACHE=/tmp/.cache/go \
 		-e GOMODCACHE=/tmp/.cache/gomod \
 		-e GOLANGCI_LINT_CACHE=/tmp/.cache/golangci-lint \
-		-v $(PWD):/work \
+		$(BUILD_VOLUME_OPTS) \
 		-w /work \
-		--user $$(id -u):$$(id -g) \
 		$(BUILDIMAGE)

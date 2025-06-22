@@ -20,6 +20,12 @@ BUILDX = buildx
 endif
 MKDIR    ?= mkdir
 
+ifeq ($(DOCKER),podman)
+MULTI_ARCH_OPTION=--manifest
+else
+MULTI_ARCH_OPTION=--provenance=false --tag
+endif
+
 ##### Global variables #####
 include $(CURDIR)/versions.mk
 
@@ -77,12 +83,16 @@ build-%: DOCKERFILE = $(CURDIR)/deployments/container/Dockerfile
 
 # Use a generic build target to build the relevant images
 $(IMAGE_TARGETS): image-%:
+	if [ "$(DOCKER)" == "podman" ]; then \
+	  $(DOCKER) manifest rm ${IMAGE} || true; \
+	  $(DOCKER) manifest create ${IMAGE}; \
+	fi
 	DOCKER_BUILDKIT=1 \
 		$(DOCKER) $(BUILDX) build --pull \
-		--provenance=false --sbom=false \
+		--sbom=false \
 		$(DOCKER_BUILD_OPTIONS) \
 		$(DOCKER_BUILD_PLATFORM_OPTIONS) \
-		--tag $(IMAGE) \
+		$(MULTI_ARCH_OPTION) $(IMAGE) \
 		--build-arg GOLANG_VERSION="$(GOLANG_VERSION)" \
 		--build-arg TOOLKIT_CONTAINER_IMAGE="$(TOOLKIT_CONTAINER_IMAGE)" \
 		--build-arg VERSION="$(VERSION)" \
