@@ -30,6 +30,18 @@ For an outlook and specific plans for improvements, please refer to [these](http
 
 If you've heard about IMEX: this DRA driver orchestrates IMEX primitives (daemons, domains, channels) under the hood.
 
+#### Testing Mode
+
+For testing and development, ComputeDomains support a testing mode that runs IMEX daemons with the `--nogpu` flag. This enables testing of IMEX communication and configuration without requiring or using a GPU. Enable via Helm:
+
+```yaml
+resources:
+  computeDomains:
+    testingMode: true
+```
+
+For more information about IMEX NO GPU mode, see the [NVIDIA IMEX documentation](https://docs.nvidia.com/multi-node-nvlink-systems/imex-guide/gettingstarted.html#running-imex-in-no-gpu-mode).
+
 ### `GPU`s
 
 The GPU allocation side of this DRA driver [will enable powerful features](https://docs.google.com/document/d/1BNWqgx_SmZDi-va_V31v3DnuVwYnF2EmN7D-O_fB6Oo) (such as dynamic allocation of MIG devices).

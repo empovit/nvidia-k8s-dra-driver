@@ -56,6 +56,10 @@ type ManagerConfig struct {
 	// logVerbosityCDDaemon controls the log verbosity for dynamically launched
 	// ComputeDomain daemons.
 	logVerbosityCDDaemon int
+
+	// testingModeCDDaemon controls whether dynamically launched ComputeDomain
+	// daemons run in testing mode (with --nogpu flag).
+	testingModeCDDaemon bool
 }
 
 // Controller manages the lifecycle of the DRA driver and its components.
@@ -84,6 +88,7 @@ func (c *Controller) Run(ctx context.Context) error {
 		clientsets:            c.config.clientsets,
 		workQueue:             workQueue,
 		logVerbosityCDDaemon:  c.config.flags.logVerbosityCDDaemon,
+		testingModeCDDaemon:   c.config.flags.testingModeCDDaemon,
 	}
 
 	// TODO: log full, nested cliFlags structure.

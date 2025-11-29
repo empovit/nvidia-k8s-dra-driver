@@ -56,6 +56,7 @@ type Flags struct {
 	podName                string
 	podNamespace           string
 	maxNodesPerIMEXDomain  int
+	testingMode            bool
 }
 
 type IMEXConfigTemplateData struct {
@@ -149,6 +150,12 @@ func newApp() *cli.App {
 			EnvVars:     []string{"MAX_NODES_PER_IMEX_DOMAIN"},
 			Destination: &flags.maxNodesPerIMEXDomain,
 		},
+		&cli.BoolFlag{
+			Name:        "testing-mode",
+			Usage:       "Enable testing mode (runs IMEX daemon with --nogpu flag)",
+			EnvVars:     []string{"IMEX_TESTING_MODE"},
+			Destination: &flags.testingMode,
+		},
 	}
 	cliFlags = append(cliFlags, featureGateConfig.Flags()...)
 	cliFlags = append(cliFlags, loggingConfig.Flags()...)
@@ -229,6 +236,10 @@ func run(ctx context.Context, cancel context.CancelFunc, flags *Flags) error {
 
 	// Prepare IMEX daemon process manager.
 	daemonCommandLine := []string{imexDaemonBinaryName, "-c", imexDaemonConfigPath}
+	if flags.testingMode {
+		daemonCommandLine = append(daemonCommandLine, "--nogpu")
+		klog.Infof("IMEX testing mode enabled: running with --nogpu flag")
+	}
 	processManager := NewProcessManager(daemonCommandLine)
 
 	// Prepare controller with CD manager (not invoking the controller yet).

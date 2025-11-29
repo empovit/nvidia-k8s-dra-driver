@@ -58,6 +58,8 @@ resources:
     enabled: true
   computeDomains:
     enabled: true
+    # Enable testing mode to run IMEX daemon with --nogpu flag for testing without GPU operations
+    testingMode: false
 
 # Feature gates configuration following Kubernetes patterns
 # Configure feature gates as key-value pairs (feature_name: true/false)
