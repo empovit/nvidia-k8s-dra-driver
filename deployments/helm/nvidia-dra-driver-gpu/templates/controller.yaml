@@ -66,6 +66,10 @@ spec:
         # controller).
         - name: LOG_VERBOSITY_CD_DAEMON
           value: "{{ .Values.logVerbosity }}"
+        # IMEX_TESTING_MODE controls whether dynamically launched
+        # CD daemons run IMEX in testing mode (with --nogpu flag).
+        - name: IMEX_TESTING_MODE
+          value: "{{ .Values.resources.computeDomains.testingMode }}"
         - name: POD_NAME
           valueFrom:
             fieldRef:

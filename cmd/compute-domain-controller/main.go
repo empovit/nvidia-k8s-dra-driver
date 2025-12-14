@@ -61,6 +61,7 @@ type Flags struct {
 	imageName             string
 	maxNodesPerIMEXDomain int
 	logVerbosityCDDaemon  int
+	testingModeCDDaemon   bool
 
 	httpEndpoint string
 	metricsPath  string
@@ -116,6 +117,12 @@ func newApp() *cli.App {
 			Required:    true,
 			EnvVars:     []string{"LOG_VERBOSITY_CD_DAEMON"},
 			Destination: &flags.logVerbosityCDDaemon,
+		},
+		&cli.BoolFlag{
+			Name:        "testing-mode-cd-daemon",
+			Usage:       "Enable testing mode for dynamically launched CD daemon pods",
+			EnvVars:     []string{"IMEX_TESTING_MODE"},
+			Destination: &flags.testingModeCDDaemon,
 		},
 		&cli.IntFlag{
 			Name:        "max-nodes-per-imex-domain",

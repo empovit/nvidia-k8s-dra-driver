@@ -53,6 +53,7 @@ type DaemonSetTemplateData struct {
 	MaxNodesPerIMEXDomain     int
 	FeatureGates              map[string]bool
 	LogVerbosity              int
+	TestingMode               bool
 }
 
 type DaemonSetManager struct {
@@ -209,6 +210,7 @@ func (m *DaemonSetManager) Create(ctx context.Context, cd *nvapi.ComputeDomain) 
 		MaxNodesPerIMEXDomain:     m.config.maxNodesPerIMEXDomain,
 		FeatureGates:              featuregates.ToMap(),
 		LogVerbosity:              m.config.logVerbosityCDDaemon,
+		TestingMode:               m.config.testingModeCDDaemon,
 	}
 
 	tmpl, err := template.ParseFiles(DaemonSetTemplatePath)

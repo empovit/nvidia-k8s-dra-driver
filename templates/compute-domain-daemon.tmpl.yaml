@@ -32,6 +32,8 @@ spec:
           value: "{{ .LogVerbosity }}"
         - name: MAX_NODES_PER_IMEX_DOMAIN
           value: "{{ .MaxNodesPerIMEXDomain }}"
+        - name: IMEX_TESTING_MODE
+          value: "{{ .TestingMode }}"
         - name: NODE_NAME
           valueFrom:
             fieldRef:
